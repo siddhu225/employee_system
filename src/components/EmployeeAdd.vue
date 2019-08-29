@@ -1,16 +1,15 @@
 <template>
-    <div id="app">
-    <nav class="navbar has-shadow has-background-grey-light	">
+  <div id="app">
       <nav class="navbar has-shadow">
       <div class="navbar-brand">
-        <!-- <a class="navbar-item image is-64x64">
-          <img src="" alt="img">
-        </a>-->
+        <a class="navbar-item image is-64x64">
+          <img :src="require('@/assets/projectLogo.png')" alt="img" />
+        </a>
       </div>
-      <div class="navbar-menu has-background-grey-light	" >
+      <div class="navbar-menu">
         <div class="navbar-start">
           <p class="navbar-item">
-            <small class="is-size-3 is-capitalized">Employee management system</small>
+            <small class="is-size-3 is-capitalized has-font-weight-bold">EMPLOYEE MANAGEMENT SYSTEM</small>
           </p>
         </div>
         <hr />
@@ -19,45 +18,38 @@
           <div class="navbar-item has-dropdown is-hoverable">
             <div class="navbar-link">Sai Siddardha</div>
             <div class="navbar-dropdown">
-              <a class="navbar-item">
-                <div>
-                  <span class="icon is-small">
-                    <i class="fa fa-user-circle-o"></i>
-                  </span>
-                  Profile
-                </div>
-              </a>
-              <a class="navbar-item">
-                <div>
-                  <span class="icon is-small">
-                    <i class="fa fa-sign-out"></i>
-                  </span>
-                  Sign Out
-                </div>
+               <a class="navbar-item">
+                <router-link
+            :to="{ name: 'login' }"
+            class="link"
+          >signout</router-link>
               </a>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    </nav>
-    <div class="section">
-      <div class="field has-text-centered">
-        <div class="label">
-          <div class="is-size-3 is-capitalized">registration form</div>
+    <div class="section box">
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="field has-text-centered">
+            <div class="label">
+              <div class="is-size-3 is-capitalized has-font-weight-bold">EMPLOYEE REGISTRATION FORM</div>
+            </div>
+          </div>
+          <hr />
         </div>
       </div>
-      <hr />
-      
-      <div class="section">
+
+      <div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Full Name</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
-                <input type="text" class="input" placeholder="First Name" v-model="name" />
+                <input type="text" class="input" placeholder="First Name" onkeyup="this.value = this.value.toUpperCase()" v-model="name" required />
                 <span class="icon is-mall">
                   <i class="fa fa-user"></i>
                 </span>
@@ -66,7 +58,7 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Date of Birth</label>
             </div>
@@ -84,13 +76,13 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Mobile no.</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
-                <input type="number" class="input" placeholder="Phone Number" v-model="number" />
+                <input type="number" class="input" placeholder="Phone Number" v-model="number" required />
                 <span class="icon is-mall">
                   <i class="fa fa-envelope"></i>
                 </span>
@@ -99,14 +91,14 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Gender</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
                 <div class="select">
-                  <select class="has-text-centered" v-model="gender">
+                  <select class="has-text-centered" v-model="gender" required>
                     <option value="-1" disabled>Select a option</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -120,13 +112,13 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Email</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
-                <input type="email" class="input" placeholder="email" v-model="email" />
+                <input type="email" class="input" placeholder="email" v-model="email" required/>
                 <span class="icon is-mall">
                   <i class="fa fa-user"></i>
                 </span>
@@ -135,14 +127,14 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">department / office</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
                 <div class="select">
-                  <select class="has-text-centered" v-model="role">
+                  <select class="has-text-centered" v-model="role" required>
                     <option value="-1" disabled>Select a option</option>
                     <option value="Admin">Admin</option>
                     <option value="Software Enginner">Software Enginner</option>
@@ -159,7 +151,7 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Address</label>
             </div>
@@ -171,13 +163,13 @@
                   class="textarea"
                   placeholder="address"
                   v-model="address"
-                />
+                required/>
               </div>
             </div>
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Experience</label>
             </div>
@@ -189,23 +181,23 @@
                   class="textarea"
                   placeholder="experiece"
                   v-model="experience"
-                />
+                required/>
               </div>
             </div>
           </div>
         </div>
 
         <div class="columns is-centered">
-          <div class="column is-4 has-text-centered">
+          <div class="column is-7 has-text-centered">
             <div class="filed">
-              <button class="button is-warning" @click="addUser">Register</button>
+              <button class="button is-success" @click="addUser">Register</button>
             </div>
           </div>
         </div>
-        </div>
       </div>
-      </div>
-    
+    </div>
+    <div class="section bcolor"></div>
+  </div>
 </template>
 
 <script>
@@ -225,8 +217,7 @@ export default {
       experience: ""
     };
   },
-  components: {
-  },
+  components: {},
   methods: {
     async addUser() {
       let res = await PostsService.addUser({
@@ -239,7 +230,17 @@ export default {
         address: this.address,
         experience: this.experience
       });
+      console.log('here',res)
+      if(res.status ===200){
+         this.$buefy.toast.open({
+                    duration: 5000,
+                    message: 'Employee named  '+this.employeeData.name+'   edited his profile',
+                    type: 'is-info',
+                    position: 'is-top',
+                });
+
       this.$router.push({ name: "Employees" });
+      }
     }
   }
 };
@@ -249,19 +250,30 @@ export default {
 .select select:not([multiple]) {
   width: 500px;
 }
+
+hr {
+  background-color: #3dcabe;
+}
+
+.section.box {
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 6%;
+}
+
+#app,
+.bcolor {
+  background-color: #d3f1ec;
+}
+.bcolor.section {
+  padding: 2.5%;
+}
 h1:last-child,
 h2:last-child,
 h3:last-child,
 h4:last-child,
 h5:last-child,
 p:last-child {
-  margin-left: 432px;
+  margin-left: 322px;
 }
-
-
-
-hr {
-  background-color: #3dcabe;
-}
-
 </style>

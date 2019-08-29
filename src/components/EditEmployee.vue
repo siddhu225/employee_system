@@ -1,15 +1,15 @@
 <template>
   <div id="editpemployee">
-    <nav class="navbar has-shadow">
+   <nav class="navbar has-shadow">
       <div class="navbar-brand">
-        <!-- <a class="navbar-item image is-64x64">
-          <img src="" alt="img">
-        </a>-->
+        <a class="navbar-item image is-64x64">
+          <img :src="require('@/assets/projectLogo.png')" alt="img" />
+        </a>
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
           <p class="navbar-item">
-            <small>Employee management system</small>
+            <small class="is-size-3 is-capitalized has-font-weight-bold">EMPLOYEE MANAGEMENT SYSTEM</small>
           </p>
         </div>
         <hr />
@@ -19,49 +19,38 @@
             <div class="navbar-link">Sai Siddardha</div>
             <div class="navbar-dropdown">
               <a class="navbar-item">
-                <div>
-                  <span class="icon is-small">
-                    <i class="fa fa-user-circle-o"></i>
-                  </span>
-                  Profile
-                </div>
-              </a>
-              <a class="navbar-item">
-                <div>
-                  <span class="icon is-small">
-                    <i class="fa fa-bug"></i>
-                  </span>
-                  Report Bug
-                </div>
-              </a>
-              <a class="navbar-item">
-                <div>
-                  <span class="icon is-small">
-                    <i class="fa fa-sign-out"></i>
-                  </span>
-                  Sign Out
-                </div>
+                <router-link
+            :to="{ name: 'login' }"
+            class="link"
+          >signout</router-link>
               </a>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    <div class="section">
-      <div class="field has-text-centered">
-        <div class="label">
-          <div class="is-size-3 is-capitalized">Employee Edit form</div>
+    
+   <div class="section box">
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="field has-text-centered">
+            <div class="label">
+              <div class="is-size-3 is-capitalized has-font-weight-bold">EMPLOYEE EDIT FORM</div>
+            </div>
+          </div>
+          <hr />
         </div>
       </div>
-      <div class="section">
+
+      <div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Full Name</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
-                <input type="text" class="input" v-model="employeeData.name" />
+                <input type="text" class="input" placeholder="First Name" v-model="employeeData.name" />
                 <span class="icon is-mall">
                   <i class="fa fa-user"></i>
                 </span>
@@ -70,7 +59,7 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Date of Birth</label>
             </div>
@@ -79,7 +68,6 @@
                 <b-datepicker
                   ref="datepicker"
                   expanded
-                  placeholder="Select a date"
                   v-model="employeeData.dob"
                 ></b-datepicker>
               </b-field>
@@ -87,13 +75,13 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Mobile no.</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
-                <input type="number" class="input" v-model="employeeData.number" />
+                <input type="number" class="input" placeholder="Phone Number" v-model="employeeData.number" />
                 <span class="icon is-mall">
                   <i class="fa fa-envelope"></i>
                 </span>
@@ -102,34 +90,13 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
-            <div class="filed">
-              <label class="label is-capitalized has-text-left">Gender</label>
-            </div>
-            <div class="field">
-              <div class="control has-icons-left">
-                <div class="select">
-                  <select class="has-text-centered" v-model="employeeData.gender">
-                    <option value="1" disabled>Select a option</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                  <span class="icon is-mall">
-                    <i class="fa fa-list"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Email</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
-                <input type="email" class="input" v-model="employeeData.email" />
+                <input type="email" class="input" placeholder="email" v-model="employeeData.email" />
                 <span class="icon is-mall">
                   <i class="fa fa-user"></i>
                 </span>
@@ -138,7 +105,7 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">department / office</label>
             </div>
@@ -146,7 +113,7 @@
               <div class="control has-icons-left">
                 <div class="select">
                   <select class="has-text-centered" v-model="employeeData.role">
-                    <option value="1" disabled>Select a option</option>
+                    <option value="-1" disabled>Select a option</option>
                     <option value="Admin">Admin</option>
                     <option value="Software Enginner">Software Enginner</option>
                     <option value="Qa Engineer">Qa Engineer</option>
@@ -162,7 +129,7 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Address</label>
             </div>
@@ -172,6 +139,7 @@
                   style="width:100"
                   type="text"
                   class="textarea"
+                  placeholder="address"
                   v-model="employeeData.address"
                 />
               </div>
@@ -179,7 +147,7 @@
           </div>
         </div>
         <div class="columns is-centered">
-          <div class="column is-4">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Experience</label>
             </div>
@@ -189,35 +157,32 @@
                   style="width:100"
                   type="text"
                   class="textarea"
+                  placeholder="experiece"
                   v-model="employeeData.experience"
                 />
               </div>
             </div>
           </div>
         </div>
-        <div class="columns is-centered">
-          <div class="column is-4">
+         <div class="columns is-centered">
+          <div class="column is-7">
             <div class="filed">
               <label class="label is-capitalized has-text-left">Password</label>
             </div>
             <div class="field">
               <div class="control has-icons-left">
-                <input
-                  type="pass"
-                  class="input"
-                  placeholder="email"
-                  v-model="employeeData.password"
-                />
+                <input type="pass" class="input" placeholder="Phone Number" v-model="employeeData.password" />
                 <span class="icon is-mall">
-                  <i class="fa fa-user"></i>
+                  <i class="fa fa-envelope"></i>
                 </span>
               </div>
             </div>
           </div>
         </div>
+        
 
         <div class="columns is-centered">
-          <div class="column is-4 has-text-centered">
+          <div class="column is-7 has-text-centered">
             <div class="filed">
               <button class="button is-warning" @click="updatePost">UPDATE</button>
             </div>
@@ -225,6 +190,7 @@
         </div>
       </div>
     </div>
+    <div class="section bcolor"></div>
   </div>
 </template>
 
@@ -254,19 +220,38 @@ export default {
     },
     
     async updatePost() {
-      await PostsService.updatePost({
+      let res = await PostsService.updatePost({
         id: this.$route.params.id,
         image:this.file,
         name: this.employeeData.name,
         dob: this.employeeData.dob,
         number: this.employeeData.number,
-        gender: this.employeeData.gender,
+        role: this.employeeData.role,
         email: this.employeeData.email,
         address: this.employeeData.address,
         experience: this.employeeData.experience,
         password: this.employeeData.password,
       });
-      this.$router.push({ name: "Employees" });
+      if (res.data == "admin") {
+        this.$buefy.toast.open({
+                    duration: 5000,
+                    message: 'Employee named  '+this.employeeData.name+'   edited his profile',
+                    type: 'is-info',
+                    position: 'is-top',
+                });
+        this.$router.push({ name: "Employees" });
+      } else  {
+        this.$buefy.toast.open({
+                    duration: 5000,
+                    message: 'Employee named'+this.employeeData.name+'edited his profile',
+                    type: 'is-info',
+                    position: 'is-top-right',
+                });
+        this.$router.push({
+          name: "EmployeeProfile",
+          params: { userId: res.data }
+        });
+      }
     },
    
   }
@@ -274,18 +259,33 @@ export default {
 </script>
 
 <style scoped>
-.column.aboutSec {
-  position: relative;
-  margin-top: -100px;
-}
-.tabs ul {
-  border-bottom-color: white;
-}
-.p-t-25 {
-  padding-top: 25px;
+.select select:not([multiple]) {
+  width: 500px;
 }
 
-.mt {
-  margin-top: -100px;
+hr {
+  background-color: #3dcabe;
+}
+
+.section.box {
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 6%;
+}
+
+#app,
+.bcolor {
+  background-color: #d3f1ec;
+}
+.bcolor.section {
+  padding: 2.5%;
+}
+h1:last-child,
+h2:last-child,
+h3:last-child,
+h4:last-child,
+h5:last-child,
+p:last-child {
+  margin-left: 322px;
 }
 </style>

@@ -42,7 +42,11 @@
                 </div>
               </div>
               <div class="field">
-                <router-link class="has-text-right" v-bind:to="{ name: 'ForgotPassword' }" style="color:blue">Forgot Password?</router-link>
+                <router-link
+                  class="has-text-right"
+                  v-bind:to="{ name: 'ForgotPassword' }"
+                  style="color:blue"
+                >Forgot Password?</router-link>
               </div>
               <div class="field">
                 <button class="button is-success" @click="onLogin">Login</button>
@@ -57,7 +61,7 @@
 
 <script>
 import PostsService from "@/services/PostsService";
-
+import * as firebase from "firebase";
 
 
 export default {
@@ -65,26 +69,61 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      token1: null
     };
   },
   components: {},
   mounted() {},
+  async created() {
+    const config = {
+      apiKey: "AIzaSyA8dkU8AqpPSC0R2pZqLbPhY_yOXPxvkbA",
+      authDomain: "employee-system-33d86.firebaseapp.com",
+      databaseURL: "http://employee-system-33d86.firebaseio.com",
+      projectId: "employee-system-33d86",
+      storageBucket: "",
+      messagingSenderId: "248643797483",
+      appId: "1:248643797483:web:69045170b41cf2c4"
+    };
+
+    firebase.initializeApp(config);
+
+    const messaging = firebase.messaging();
+
+    messaging.usePublicVapidKey(
+      "BMyj0aBOipYu_8zFj2R2sYAu0hIIni_MnIa6yfucd7tnPmmlcy8DPC7r5AZ8I9r65KBslFJU1h_5gE5yQcbV8yk"
+    ); 
+
+    
+    let token1;
+    await messaging.requestPermission();
+
+    console.log("Notification permission granted.");
+
+   
+    this.token1 = await messaging.getToken();
+    console.log("output--", this.token1);
+    
+  },
   methods: {
     async onLogin() {
       console.log("helloo siddhu");
 
       let res = await PostsService.postUser({
         email: this.email,
-        password: this.password
+        password: this.password,
+        token:this.token1
       });
       if (res.data == "admin") {
         this.$router.push({ name: "Employees" });
       } else if (res.data == "not_user") {
         this.$router.push({ name: "login" });
-        alert("Please register first")
+        alert("Please register first");
       } else {
-        this.$router.push({ name: "EmployeeProfile", params:{'userId': res.data} });
+        this.$router.push({
+          name: "EmployeeProfile",
+          params: { userId: res.data }
+        });
       }
     }
   }

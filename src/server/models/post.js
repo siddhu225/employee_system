@@ -38,13 +38,36 @@ var PostSchema = new Schema({
         type:String,
         require:true
       },
-      img:{
-         data: Buffer, 
-         contentType: String 
+      token:{
+        type:String,
+        require:true
       }
 
 
 });
 
+
+// var PostSchema1= new Schema({
+//   header:{
+//     type:String,
+//     require:true,
+//   },
+//   body: {
+//     type: String,
+//     require: true,
+//   },
+//   toNotifyIds:{
+//     type: Array,
+//     require: true
+//   }
+//   isComplete:{
+//     type: Boolean,
+//     require: true,
+//   },
+
+// })
+
 var Post = mongoose.model("employee", PostSchema);
-module.exports = Post;
+// var Post1= mongoose.model("message",PostSchema1);
+module.exports = { Post };
+

@@ -3,16 +3,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 var mongoose = require("mongoose");
-var FCM = require('fcm-node');
+var FCM = require("fcm-node");
 
-
-
-var serverKey = 'AAAAOeRTQes:APA91bGyykIdeWxBikWC9c8QVmt7IEM8aymmwUMkYmqJTWjfqeV7Ece1vdzcaE0QW5zR5oSVS0zGEKXt2xJdQYMQ34LSPHq6qEt6VN1MK8E2il4mIaWBQaMTjr8ZXf6xmtcdLjssiVxO';
+var serverKey = 'AAAAOeRTQes:APA91bGyykIdeWxBikWC9c8QVmt7IEM8aymmwUMkYmqJTWjfqeV7Ece1vdzcaE0QW5zR5oSVS0zGEKXt2xJdQYMQ34LSPHq6qEt6VN1MK8E2il4mIaWBQaMTjr8ZXf6xmtcdLjssiVxO'; //put your server key here
 var fcm = new FCM(serverKey);
 
 var nodemailer = require("nodemailer");
 
-var Post = require("../models/post");
+var { Post, Post1 } = require("../models/post");
+// var Post1 = require("../models/post");
 
 
 
@@ -36,54 +35,17 @@ db.once("open", function(callback) {
 
 
 
-var message = { 
-  to: 'c0wRZEN3ido:APA91bHJG_Ka2u58OFfF4SLImF2nzvTqCyubX0n3E8UDSNr55RWEZW8K-GsVy_d2B514kEFhWAC0S4tB3ecfFQHsg_j8Q8jmhBo33KpDJle_3A15gX5sU75vXCR7c_uSfMKJgepxMVN8', 
-  collapse_key: 'your_collapse_key',
-  
-  notification: {
-      title: 'Title of your push notification', 
-      body: 'Body of your push notification' 
-  },
-  
-  data: {  //you can send only notification or only data(or include both)
-      my_key: 'my value',
-      my_another_key: 'my another value'
-  }
-};
-
-fcm.send(message, function(err, response){
-  if (err) {
-      console.log("Something has gone wrong!");
-  } else {
-      console.log("Successfully sent with response: ", response);
-  }
-});
 
 
-
-
-app.post("/get_token",(req,res)=>{
-
-  console.log("heyy");
-
-  console.log(req.body);
-})
-
-
-
-
-
-app.post("/forgot/password",(req,res) =>{
-
-  Post.findOne({email:req.body.email},function(err,user){
-
+app.post("/forgot/password", (req, res) => {
+  Post.findOne({ email: req.body.email }, function(err, user) {
     if (err) {
       console.log("THIS IS ERROR RESPONSE");
       //res.json(err)
     }
     console.log(req.body.password);
 
-    user.password=req.body.password;
+    user.password = req.body.password;
 
     user.save(function(error) {
       if (error) {
@@ -93,11 +55,8 @@ app.post("/forgot/password",(req,res) =>{
         success: true
       });
     });
-
-  })
-
+  });
 });
-
 
 
 
@@ -107,29 +66,45 @@ app.post("/login", (req, res) => {
   var username = req.body.email;
   var password = req.body.password;
 
+  var token=req.body.token;
+
   Post.findOne({ email: username }, function(err, user) {
     
-    // In case the user not found
     if (err) {
       console.log("THIS IS ERROR RESPONSE");
-      res.json(err)
+      res.json(err);
     }
 
     if (user && user.password == password && user.role == "Admin") {
       console.log("i am a admin");
       res.send("admin");
-      // res.render(localhost:8080/employees);
     } else if (user && user.password == password && user.role != "admin") {
       console.log(user._id);
-      
+
       res.send(user._id);
     } else {
       console.log("Credentials wrong");
-      res.send("not_user")
-      //res.json({data: "Login invalid"});
+      res.send("not_user");
     }
   });
+
+  Post.findOne({ email: username }, function(err, user){
+
+    if(err){
+      console.log(err);
+    }
+
+    user.token=token;
+
+    user.save(function(error){
+      if(error){
+        console.log(error);
+      }
+    })
+  })
 });
+
+
 
 app.post("/employee/add", (req, res) => {
   let r = Math.random()
@@ -145,8 +120,9 @@ app.post("/employee/add", (req, res) => {
     address: req.body.address,
     experience: req.body.experience,
     password: r,
+    token :undefined
   });
-  
+
   Post.find({}, function(error, employees) {
     if (error) {
       console.error(error);
@@ -155,7 +131,57 @@ app.post("/employee/add", (req, res) => {
     for (let i = 0; i < employees.length; i++) {
       ids.push(employees[i].email);
     }
-    console.log(ids);
+
+    var ids1=[]
+
+    for (let i = 0; i < employees.length; i++) {
+      if(employees[i].token== undefined){
+        continue;
+      }else{
+      ids1.push(employees[i].token);
+      }
+    }
+
+    var message = {
+      registration_ids: ids1,
+      
+      notification: {
+        title: "NEW EMPLOYEE ADDED",
+        body: "a new member named   " + req.body.name + "   is added to our team"
+       
+      }
+    };
+
+    
+
+   
+  
+      fcm.send(message, async function(err, response) {
+      if (err) {
+        console.log("Something has gone wrong!");
+      } else {
+        // let toDb = new Post1({
+        //   header: message.notification.title,
+        //   body: message.notification.body,
+        //   toNotifyIds:  ids1,
+        //   isComplete: false
+        // })
+        // toDb.save(function(error) {
+        //   if (error) {
+        //     console.log(error);
+        //     return;
+        //   }
+        //   console.log('sent!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        // });
+        console.log("Successfully sent with response: ", response);
+    }
+  });
+
+
+
+
+
+
 
     var transporter = nodemailer.createTransport({
       service: "gmail",
@@ -168,22 +194,17 @@ app.post("/employee/add", (req, res) => {
     var mailOptions1 = {
       from: "sumalasai225@gmail.com",
       to: ids,
-      subject: "A new Member is added to our team",
-      text: "a new member named"+req.body.name+"is added to our team"
+      subject: "NEW MEMBER IS ADDED TO OUR TEAM",
+      text: "a new member named   " + req.body.name + "   is added to our team"
     };
 
     transporter.sendMail(mailOptions1, function(error, info) {
       if (error) {
         console.log(error);
-        console.log("heyyy");
       } else {
         console.log("Email sent: " + info.response);
       }
     });
-
-
-
-  
   });
 
   var transporter = nodemailer.createTransport({
@@ -197,18 +218,13 @@ app.post("/employee/add", (req, res) => {
   var mailOptions = {
     from: "sumalasai225@gmail.com",
     to: req.body.email,
-    subject: "Welcome to access design solutions",
-    text: "your password is:" + r
+    subject: "WELCOME TO ACCESS DESIGN SOLUTIONS",
+    text: "YOUR PASSWORD IS:" + r
   };
-
-  
-
-
 
   transporter.sendMail(mailOptions, function(error, info) {
     if (error) {
       console.log(error);
-      console.log("heyyy");
     } else {
       console.log("Email sent: " + info.response);
     }
@@ -226,7 +242,7 @@ app.post("/employee/add", (req, res) => {
 });
 
 app.get("/employees/view/:id", (req, res) => {
-  console.log(req.params.id);
+
   Post.findById(req.params.id, function(error, employee) {
     if (error) {
       console.error(error);
@@ -258,8 +274,6 @@ app.get("/employees/:id", (req, res) => {
 
 app.put("/employees/:id", (req, res) => {
 
-  console.log("_________________",req.body.file)
-
   Post.findById(req.params.id, function(error, employee) {
     if (error) {
       console.error(error);
@@ -267,78 +281,100 @@ app.put("/employees/:id", (req, res) => {
 
     (employee.name = req.body.name),
       (employee.dob = req.body.dob),
-      (employee.gender = req.body.gender),
+      (employee.role = req.body.role),
       (employee.number = req.body.number),
       (employee.email = req.body.email),
       (employee.address = req.body.address),
       (employee.experience = req.body.experience),
       (employee.password = req.body.password),
-      (employee.img=req.body.file),
-
-      
-
-      
+      (employee.img = req.body.file),
       employee.save(function(error) {
         if (error) {
           console.log(error);
         }
-        res.send({
-          success: true
-        });
+        if (employee.role == "Admin") {
+          res.send("admin");
+        } else  {
+          res.send(employee._id);
+        }
       });
-
-
   });
 
-  Post.find({role:'Admin'},function(error,employee){
+  Post.find({ role: "Admin" }, function(error, employee) {
+    if (error) {
+      console.log(error);
+    }
 
-    if(error){
-      console.log(error)
+    var ids = [];
+    for (let i = 0; i < employee.length; i++) {
+      ids.push(employee[i].email);
+    }
+
+    var ids1=[]
+
+    for (let i = 0; i < employee.length; i++) {
+      if(employee[i].token== undefined){
+        continue;
+      }else{
+      ids1.push(employee[i].token);
+      }
     }
     
-    var ids = [];
-      for (let i = 0; i < employee.length; i++) {
-        ids.push(employee[i].email);
+
+    var message = {
+      registration_ids: ids1,
+      collapse_key: "your_collapse_key",
+  
+      notification: {
+        title: "EMPLOYEE EDITED HIS PROFILE",
+        body: req.body.name+"is edited his profile"
+      },
+  
+      data: {
+        //you can send only notification or only data(or include both)
+        my_key: "my value",
+        my_another_key: "my another value"
       }
+    };
   
-      var transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "sumalasai225@gmail.com",
-          pass: "siddhu225"
-        }
-      });
-  
-      var mailOptions1 = {
-        from: "sumalasai225@gmail.com",
-        to: ids,
-        subject: req.body.name+"is edited his profile",
-        text: "A employee"+req.body.name+"is edited his profile"
-      };
-  
-      transporter.sendMail(mailOptions1, function(error, info) {
-        if (error) {
-          console.log(error);
-          console.log("heyyy");
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
-  
-  
-  
-    
+    fcm.send(message, function(err, response) {
+      if (err) {
+        console.log("Something has gone wrong!");
+      } else {
+        console.log("Successfully sent with response: ", response);
+      }
     });
+
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "sumalasai225@gmail.com",
+        pass: "siddhu225"
+      }
+    });
+
+    var mailOptions1 = {
+      from: "sumalasai225@gmail.com",
+      to: ids,
+      subject: req.body.name + "IS EDITED HIS PROFILE",
+      text: "A employee" + req.body.name + "is edited his profile"
+    };
+
+    transporter.sendMail(mailOptions1, function(error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+  });
 });
 
 app.delete("/employees/:id", (req, res) => {
-  
   Post.remove(
     {
       _id: req.params.id
     },
-
-    
 
     function(err, employee) {
       if (err) res.send(err);
@@ -355,7 +391,39 @@ app.delete("/employees/:id", (req, res) => {
     for (let i = 0; i < employees.length; i++) {
       ids.push(employees[i].email);
     }
-    console.log(ids);
+
+    var ids1=[]
+
+    for (let i = 0; i < employees.length; i++) {
+      if(employees[i].token== undefined){
+        continue;
+      }else{
+      ids1.push(employees[i].token);
+      }
+    }
+
+    var message = {
+      registration_ids: ids1,
+      collapse_key: "your_collapse_key",
+  
+      notification: {
+        title: "Member is leaving from our company",
+        body: "Wish him good luck"
+      },
+  
+      data: {
+        my_key: "my value",
+        my_another_key: "my another value"
+      }
+    };
+  
+    fcm.send(message, function(err, response) {
+      if (err) {
+        console.log("Something has gone wrong!");
+      } else {
+        console.log("Successfully sent with response: ", response);
+      }
+    });
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -364,22 +432,22 @@ app.delete("/employees/:id", (req, res) => {
       }
     });
 
-
     var mailOptions1 = {
       from: "sumalasai225@gmail.com",
       to: ids,
-      subject: "A new Member is added to our team",
+      subject: "A MEMBER IS LEAVING FROM OUR COMPANY",
       text: "A member is leaving from our team wish him good luck"
     };
 
     transporter.sendMail(mailOptions1, function(error, info) {
       if (error) {
         console.log(error);
-        console.log("heyyy");
       } else {
         console.log("Email sent: " + info.response);
       }
     });
+  });
 });
-});
+
+
 app.listen(process.env.PORT || 8081);

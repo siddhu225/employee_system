@@ -1,39 +1,29 @@
 <template>
   <div class="Employees">
-    <nav class="navbar has-shadow">
+     <nav class="navbar has-shadow">
       <div class="navbar-brand">
-        <!-- <a class="navbar-item image is-64x64">
-          <img src="" alt="img">
-        </a>-->
+        <a class="navbar-item image is-64x64">
+          <img :src="require('@/assets/projectLogo.png')" alt="img" />
+        </a>
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
           <p class="navbar-item">
-            <small class="is-size-3 is-capitalized">Employee management system</small>
+            <small class="is-size-3 is-capitalized has-font-weight-bold">EMPLOYEE MANAGEMENT SYSTEM</small>
           </p>
         </div>
         <hr />
         <div class="navbar-end">
           <div class="navbar-item"></div>
           <div class="navbar-item has-dropdown is-hoverable">
-            <div class="navbar-link">Sai Siddardha</div>
+            <div class="navbar-link">Actions</div>
             <div class="navbar-dropdown">
               <a class="navbar-item">
-                <div>
-                  <span class="icon is-small">
-                    <i class="fa fa-user-circle-o"></i>
-                  </span>
-                  Profile
-                </div>
-              </a>
-              <a class="navbar-item">
-                <div>
-                  <span class="icon is-small">
-                    <i class="fa fa-sign-out"></i>
-                  </span>
-                  Sign Out
-                </div>
-              </a>
+                <router-link
+            :to="{ name: 'login' }"
+            class="link"
+          >signout</router-link>
+          </a>
             </div>
           </div>
         </div>
@@ -71,7 +61,7 @@
           <td width="200" class="has-text-centered">Actions</td>
         </tr>
         <tr v-for="employee in Employees" :key="employee._id">
-          <td>{{ employee.name }}</td>
+          <td>{{ employee.name }} </td>
           <td>{{ employee.dob }}</td>
           <td>{{ employee.number }}</td>
           <td>{{ employee.gender }}</td>
@@ -124,8 +114,20 @@ export default {
     async getEmployees() {
       const response = await PostsService.fetchEmployees();
       this.Employees = response.data.employees;
+      
+      for(let i=0;i<(this.Employees).length;i++){
+        var dt=new Date(this.Employees[i].dob);
+        
+        this.Employees[i].dob=dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear();
+      }
     },
     async deleteEmployee(id) {
+      this.$buefy.toast.open({
+                    duration: 5000,
+                    message: 'A employee is leaving the company',
+                    type: 'is-danger',
+                    position: 'is-top',
+                });
       await PostsService.deleteEmployee(id);
       this.getEmployees();
     },
@@ -134,12 +136,12 @@ export default {
         this.employees = this.getEmployees();
       } else {
         this.Employees = this.Employees.filter(Employee => {
-          return Employee.name.match(this.search);
+          return Employee.name.match(this.search.toUpperCase());
         });
       }
     }
   }
-};
+}
 </script>
 <style type="text/css" scoped>
 .input,
@@ -194,6 +196,6 @@ h3:last-child,
 h4:last-child,
 h5:last-child,
 p:last-child {
-  margin-left: 432px;
+  margin-left: 322px;
 }
 </style>

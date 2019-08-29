@@ -17,13 +17,13 @@ export default {
     return Api().post("/login", params);
   },
 
-  deleteEmployee(id) {  
-    console.log("!!!!!!!", id);
+  deleteEmployee(id) {
     return Api().delete("/employees/" + id);
   },
 
+ 
+
   getUser(params) {
-    console.log("params~`````````````~~~~~~~~~~~~", params.id);
     return Api().get("/employees/view/" + params.id);
   },
 
