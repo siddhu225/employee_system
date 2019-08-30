@@ -87,7 +87,7 @@ export default {
      async onLogin() {
 
       if(this.password1 ===  this.password2){
-        let res = await PostsService.postUser1({
+        await PostsService.postUser1({
         email: this.email,
         password: this.password1,
 

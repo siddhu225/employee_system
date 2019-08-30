@@ -230,7 +230,6 @@ export default {
         address: this.address,
         experience: this.experience
       });
-      if(res.status ===200){
          this.$buefy.toast.open({
                     duration: 5000,
                     message: 'Employee named  '+this.name+'   edited his profile',
@@ -239,7 +238,6 @@ export default {
                 });
 
       this.$router.push({ name: "Employees" });
-      }
     }
   }
 };
