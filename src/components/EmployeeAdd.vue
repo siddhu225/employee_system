@@ -234,7 +234,7 @@ export default {
       if(res.status ===200){
          this.$buefy.toast.open({
                     duration: 5000,
-                    message: 'Employee named  '+this.employeeData.name+'   edited his profile',
+                    message: 'Employee named  '+this.name+'   edited his profile',
                     type: 'is-info',
                     position: 'is-top',
                 });

@@ -93,9 +93,7 @@ export default {
     messaging.usePublicVapidKey(
       "BMyj0aBOipYu_8zFj2R2sYAu0hIIni_MnIa6yfucd7tnPmmlcy8DPC7r5AZ8I9r65KBslFJU1h_5gE5yQcbV8yk"
     ); 
-
     
-    let token1;
     await messaging.requestPermission();
 
     console.log("Notification permission granted.");
