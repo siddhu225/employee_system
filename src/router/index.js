@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Hello from "@/components/HelloWorld";
 import EmployeeAdd from "@/components/EmployeeAdd";
 import login from "@/components/login";
 import Employees from "@/components/employees";

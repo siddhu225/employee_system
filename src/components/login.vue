@@ -93,19 +93,15 @@ export default {
     messaging.usePublicVapidKey(
       "BMyj0aBOipYu_8zFj2R2sYAu0hIIni_MnIa6yfucd7tnPmmlcy8DPC7r5AZ8I9r65KBslFJU1h_5gE5yQcbV8yk"
     ); 
-    
-    await messaging.requestPermission();
 
-    console.log("Notification permission granted.");
+    await messaging.requestPermission();
 
    
     this.token1 = await messaging.getToken();
-    console.log("output--", this.token1);
     
   },
   methods: {
     async onLogin() {
-      console.log("helloo siddhu");
 
       let res = await PostsService.postUser({
         email: this.email,

@@ -220,7 +220,7 @@ export default {
   components: {},
   methods: {
     async addUser() {
-      let res = await PostsService.addUser({
+       await PostsService.addUser({
         name: this.name,
         dob: this.dob,
         number: this.number,
@@ -230,7 +230,6 @@ export default {
         address: this.address,
         experience: this.experience
       });
-      console.log('here',res)
       if(res.status ===200){
          this.$buefy.toast.open({
                     duration: 5000,
