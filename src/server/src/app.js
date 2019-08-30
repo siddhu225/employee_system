@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 var mongoose = require("mongoose");
 var FCM = require("fcm-node");
+var serveStatic = require('serve-static');
 
 var serverKey = 'AAAAOeRTQes:APA91bGyykIdeWxBikWC9c8QVmt7IEM8aymmwUMkYmqJTWjfqeV7Ece1vdzcaE0QW5zR5oSVS0zGEKXt2xJdQYMQ34LSPHq6qEt6VN1MK8E2il4mIaWBQaMTjr8ZXf6xmtcdLjssiVxO'; //put your server key here
 var fcm = new FCM(serverKey);
@@ -17,6 +18,8 @@ var { Post, Post1 } = require("../models/post");
 
 const app = express();
 app.use(morgan("combined"));
+app.use(serveStatic(__dirname + "/dist"));
+
 app.use(bodyParser.json());
 app.use(cors());
 
