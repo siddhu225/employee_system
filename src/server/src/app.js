@@ -6,6 +6,9 @@ var mongoose = require("mongoose");
 var FCM = require("fcm-node");
 var serveStatic = require('serve-static');
 
+
+var path = require("path");
+
 var serverKey = 'AAAAOeRTQes:APA91bGyykIdeWxBikWC9c8QVmt7IEM8aymmwUMkYmqJTWjfqeV7Ece1vdzcaE0QW5zR5oSVS0zGEKXt2xJdQYMQ34LSPHq6qEt6VN1MK8E2il4mIaWBQaMTjr8ZXf6xmtcdLjssiVxO'; //put your server key here
 var fcm = new FCM(serverKey);
 
@@ -18,10 +21,13 @@ var { Post, Post1 } = require("../models/post");
 
 const app = express();
 app.use(morgan("combined"));
-app.use(serveStatic(__dirname + "/dist"));
 
 app.use(bodyParser.json());
 app.use(cors());
+
+app.use(serveStatic(__dirname + "/dist"));
+
+
 
 mongoose.connect("mongodb://localhost:27017/Employee");
 var db = mongoose.connection;
@@ -163,19 +169,6 @@ app.post("/employee/add", (req, res) => {
       if (err) {
         console.log("Something has gone wrong!");
       } else {
-        // let toDb = new Post1({
-        //   header: message.notification.title,
-        //   body: message.notification.body,
-        //   toNotifyIds:  ids1,
-        //   isComplete: false
-        // })
-        // toDb.save(function(error) {
-        //   if (error) {
-        //     console.log(error);
-        //     return;
-        //   }
-        //   console.log('sent!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        // });
         console.log("Successfully sent with response: ", response);
     }
   });
