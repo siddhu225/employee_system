@@ -273,9 +273,10 @@ hr {
   margin-top: 6%;
 }
 
-#app,
+
+#editpemployee,
 .bcolor {
-  background-color: #d3f1ec;
+  background-color: #92b679;
 }
 .bcolor.section {
   padding: 2.5%;

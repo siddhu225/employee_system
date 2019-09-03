@@ -7,8 +7,6 @@ var FCM = require("fcm-node");
 var serveStatic = require('serve-static');
 
 
-var path = require("path");
-
 var serverKey = 'AAAAOeRTQes:APA91bGyykIdeWxBikWC9c8QVmt7IEM8aymmwUMkYmqJTWjfqeV7Ece1vdzcaE0QW5zR5oSVS0zGEKXt2xJdQYMQ34LSPHq6qEt6VN1MK8E2il4mIaWBQaMTjr8ZXf6xmtcdLjssiVxO'; //put your server key here
 var fcm = new FCM(serverKey);
 
@@ -35,6 +33,9 @@ db.on("error", console.error.bind(console, "connection error"));
 db.once("open", function(callback) {
   console.log("Connection Succeeded");
 });
+
+
+
 
 
 

@@ -258,6 +258,7 @@ hr {
   margin-top: 6%;
 }
 
+
 #app,
 .bcolor {
   background-color: #d3f1ec;

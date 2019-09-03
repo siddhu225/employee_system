@@ -61,7 +61,7 @@
           <td width="200" class="has-text-centered">Actions</td>
         </tr>
         <tr v-for="employee in Employees" :key="employee._id">
-          <td>{{ employee.name }} </td>
+          <td>{{ employee.name | uppercase  }} </td>
           <td>{{ employee.dob }}</td>
           <td>{{ employee.number }}</td>
           <td>{{ employee.gender }}</td>
@@ -139,6 +139,11 @@ export default {
           return Employee.name.match(this.search.toUpperCase());
         });
       }
+    }
+  },
+  filters:{
+    uppercase: function(v) {
+      return v.toUpperCase();
     }
   }
 }
