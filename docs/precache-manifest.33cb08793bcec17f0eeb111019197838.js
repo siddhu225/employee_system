@@ -12,7 +12,7 @@ self.__precacheManifest = [
     "url": "https://siddhu225.github.io/employee_system/js/app.1868b8e6.js"
   },
   {
-    "revision": "a20fcebe66e2044d05fafebd7a186989",
+    "revision": "b2680867b40504286419385501386198",
     "url": "https://siddhu225.github.io/employee_system/index.html"
   },
   {
