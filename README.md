@@ -1,5 +1,19 @@
 # employee_system
 
+This is a Employee mangement system made in Vue.js, the following technologies were used:
+
+* Vue.js for Frontend
+* Node.js for backend
+* Firebase for deploying and Web-push Notifications
+* Bulma for css
+* MongoDB for Database.
+* Buefy
+* Ngrok
+* Node mailer for Email Notifications.
+* fcm-node for Push notifications
+* Axios
+* font-awesome 
+
 ## Project setup
 ```
 npm install
