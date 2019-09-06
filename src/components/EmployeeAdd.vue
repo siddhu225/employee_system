@@ -16,7 +16,7 @@
         <div class="navbar-end">
           <div class="navbar-item"></div>
           <div class="navbar-item has-dropdown is-hoverable">
-            <div class="navbar-link">Sai Siddardha</div>
+            <div class="navbar-link">Actions</div>
             <div class="navbar-dropdown">
                <a class="navbar-item">
                 <router-link
@@ -232,7 +232,7 @@ export default {
       });
          this.$buefy.toast.open({
                     duration: 5000,
-                    message: 'Employee named  '+this.name+'   edited his profile',
+                    message: 'Employee named  '+this.name+'   added his profile',
                     type: 'is-info',
                     position: 'is-top',
                 });

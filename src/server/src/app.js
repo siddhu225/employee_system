@@ -4,7 +4,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 var mongoose = require("mongoose");
 var FCM = require("fcm-node");
-var serveStatic = require('serve-static');
 
 
 var serverKey = 'AAAAOeRTQes:APA91bGyykIdeWxBikWC9c8QVmt7IEM8aymmwUMkYmqJTWjfqeV7Ece1vdzcaE0QW5zR5oSVS0zGEKXt2xJdQYMQ34LSPHq6qEt6VN1MK8E2il4mIaWBQaMTjr8ZXf6xmtcdLjssiVxO'; //put your server key here
@@ -12,9 +11,7 @@ var fcm = new FCM(serverKey);
 
 var nodemailer = require("nodemailer");
 
-var { Post, Post1 } = require("../models/post");
-// var Post1 = require("../models/post");
-
+var { Post } = require("../models/post");
 
 
 const app = express();
@@ -26,24 +23,12 @@ app.use(cors());
 
 
 
-
 mongoose.connect("mongodb://localhost:27017/Employee");
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", function(callback) {
   console.log("Connection Succeeded");
 });
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -104,7 +89,7 @@ app.post("/login", (req, res) => {
       console.log(err);
     }
 
-    user.token=token;
+    user.token.push(token);
 
     user.save(function(error){
       if(error){
@@ -130,7 +115,7 @@ app.post("/employee/add", (req, res) => {
     address: req.body.address,
     experience: req.body.experience,
     password: r,
-    token :undefined
+    token : []
   });
 
   Post.find({}, function(error, employees) {
@@ -145,12 +130,21 @@ app.post("/employee/add", (req, res) => {
     var ids1=[]
 
     for (let i = 0; i < employees.length; i++) {
-      if(employees[i].token== undefined){
+      if(employees[i].token.length == 0){
         continue;
       }else{
-      ids1.push(employees[i].token);
+        const names = employees[i].token;
+        ids1.push(...new Set(names)) ;
       }
     }
+
+    ids1 = [...new Set(ids1)];
+
+  
+
+    ids1=ids1.filter(Boolean);
+
+  
 
     var message = {
       registration_ids: ids1,
@@ -310,13 +304,17 @@ app.put("/employees/:id", (req, res) => {
     var ids1=[]
 
     for (let i = 0; i < employee.length; i++) {
-      if(employee[i].token== undefined){
+      if(employee[i].token.length == 0){
         continue;
       }else{
-      ids1.push(employee[i].token);
+        const names = employee[i].token;
+        ids1.push(...new Set(names)) ;
       }
     }
+
+    ids1 = [...new Set(ids1)];
     
+    ids1=ids1.filter(Boolean);
 
     var message = {
       registration_ids: ids1,
@@ -324,7 +322,7 @@ app.put("/employees/:id", (req, res) => {
   
       notification: {
         title: "EMPLOYEE EDITED HIS PROFILE",
-        body: req.body.name+"is edited his profile"
+        body: req.body.name+"edited his profile"
       },
   
       data: {
@@ -368,18 +366,7 @@ app.put("/employees/:id", (req, res) => {
 });
 
 app.delete("/employees/:id", (req, res) => {
-  Post.remove(
-    {
-      _id: req.params.id
-    },
 
-    function(err, employee) {
-      if (err) res.send(err);
-      res.send({
-        success: true
-      });
-    }
-  );
   Post.find({}, function(error, employees) {
     if (error) {
       console.error(error);
@@ -392,12 +379,19 @@ app.delete("/employees/:id", (req, res) => {
     var ids1=[]
 
     for (let i = 0; i < employees.length; i++) {
-      if(employees[i].token== undefined){
+      if(employees[i].token.length == 0){
         continue;
       }else{
-      ids1.push(employees[i].token);
+        const names = employees[i].token;
+        ids1.push(...new Set(names)) ;
       }
     }
+
+    ids1 = [...new Set(ids1)];
+
+    ids1=ids1.filter(Boolean);
+
+    
 
     var message = {
       registration_ids: ids1,
@@ -444,6 +438,19 @@ app.delete("/employees/:id", (req, res) => {
       }
     });
   });
+  Post.remove(
+    {
+      _id: req.params.id
+    },
+
+    function(err, employee) {
+      if (err) res.send(err);
+      res.send({
+        success: true
+      });
+    }
+  );
+ 
 });
 
 

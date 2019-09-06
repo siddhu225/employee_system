@@ -39,7 +39,7 @@ var PostSchema = new Schema({
         require:true
       },
       token:{
-        type:String,
+        type:Array,
         require:true
       }
 
